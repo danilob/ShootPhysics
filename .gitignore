@@ -1,0 +1,9 @@
+release/*
+Release
+debug/*
+Debug
+*.user
+*.o
+*.ppm
+*.mp4
+screenshot/*
