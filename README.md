@@ -1,0 +1,1 @@
+Configuração ODE: ./configure --enable-double-precision --with-cylinder-cylinder=libccd  --with-box-cylinder=libccd  --with-capsule-cylinder=libccd  --with-convex-box=libccd  --with-convex-capsule=libccd  --with-convex-cylinder=libccd  --with-convex-sphere=libccd  --with-convex-convex=libccd

@@ -1,0 +1,32 @@
+#include "glwidget.h"
+
+GLWidget::GLWidget(QWidget *parent) :
+    QGLWidget(parent)
+{
+}
+
+
+void GLWidget::initializeGL()
+{
+    glClearColor(1,1,1,1);
+}
+
+void GLWidget::resizeGL(int w, int h)
+{
+    const float ar = w>0 ? (float) w / (float) h : 1.0;
+
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(30.,ar,0.001,1200000.);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    scene->setProjection(Vec4(30.,ar,0.001,1200000)); 
+}
+
+void GLWidget::paintGL()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glLoadIdentity();
+}
