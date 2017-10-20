@@ -3,11 +3,9 @@
 
 #define EPSILON 0.00001
 #define HALFPI 1.570796326794895
-#include "matrix4x4.h"
 #include <math.h>
 #include <stdlib.h>
 #include <vector>
-#include "physics/physics.h"
 #include "vec4.h"
 
 class QuaternionQ
@@ -71,18 +69,7 @@ class QuaternionQ
       static QuaternionQ getRotation(Vec4 u, Vec4 v);
       QuaternionQ inverse();
 
-
-
-//      double normal()
-//      {
-//          double res;
-//          res = sqrt(this->getScalar()*this->getScalar()+
-//                     this->getPosX()*this->getPosX()+
-//                     this->getPosY()*this->getPosY()+
-//                     this->getPosZ()*this->getPosZ());
-//          return res;
-//      }
-      Matrix4x4 getMatrix();
+      void toAxisAngle( Vec4* axis, float* angle );
 
       //os angulos aqui passados como parametro ou retornados sao considerados estar em graus
       //converte o quaternion em angulos de Euler (ordem XYZ)
@@ -90,12 +77,7 @@ class QuaternionQ
       //converte os angulos de Euler em um quaternion e atribui a this (ordem XYZ)
       void fromEuler( Vec4 euler );
       static QuaternionQ fromEuler2Quat( Vec4 euler );
-      //converte o quaternion em eixo e angulo (passados por referencia)
-      void toAxisAngle( Vec4* axis, dReal* angle );
 
-
-      //converte eixo e angulo em um quaternion e atribui a this
-      void fromAxisAngle( Vec4 axis, dReal angle );
       void showQuaternion();
 
       QuaternionQ operator /(double k);

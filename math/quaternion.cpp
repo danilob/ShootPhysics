@@ -1,4 +1,7 @@
 #include "quaternion.h"
+#include "math.h"
+#include "ode/ode.h"
+
 //---------------------------------------------------------------------------
 //Construtor
 float radToGrau(float angle){
@@ -299,44 +302,6 @@ Vec4 QuaternionQ::getVector()
     return Vec4(this->x,this->y,this->z);
 }
 
-Matrix4x4 QuaternionQ::getMatrix()
-{
-
-        float x2 = this->x * this->x;
-        float y2 = this->y * this->y;
-        float z2 = this->z * this->z;
-        float xy = this->x * this->y;
-        float xz = this->x * this->z;
-        float yz = this->y * this->z;
-        float wx = this->w * this->x;
-        float wy = this->w * this->y;
-        float wz = this->w * this->z;
-
-        // This calculation would be a lot more complicated for non-unit length quaternions
-        // Note: The constructor of Matrix4 expects the Matrix in column-major format like expected by
-        //   OpenGL
-        float rot[16] = {1.0f - 2.0f * (y2 + z2), 2.0f * (xy - wz), 2.0f * (xz + wy), 0.0f,
-                         2.0f * (xy + wz), 1.0f - 2.0f * (x2 + z2), 2.0f * (yz - wx), 0.0f,
-                         2.0f * (xz - wy), 2.0f * (yz + wx), 1.0f - 2.0f * (x2 + y2), 0.0f,
-                         0.0f, 0.0f, 0.0f, 1.0f};
-
-//        float rot[16] = {1.0f - 2.0f * (y2 + z2), 2.0f * (xy + wz) ,2.0f * (xz - wy) , 0.0f,
-//                         2.0f * (xy - wz), 1.0f - 2.0f * (x2 + z2), 2.0f * (yz + wx), 0.0f,
-//                         2.0f * (xz + wy),  2.0f * (yz - wx), 1.0f - 2.0f * (x2 + y2), 0.0f,
-//                         0.0f, 0.0f, 0.0f, 1.0f};
-
-
-//        this->normalize();
-//        float rot[16] = {getScalar(),-getPosX(),getPosZ(),-getPosY(),
-//                         getPosX(),getScalar(),-getPosY(),-getPosZ(),
-//                         -getPosZ(),getPosY(),getScalar(),-getPosX(),
-//                         getPosY(),getPosZ(),getPosX(),getScalar()
-
-
-
-//        };
-        return Matrix4x4(rot);
-}
 
 QuaternionQ operator*(QuaternionQ q1, QuaternionQ q2) {
 
@@ -490,59 +455,7 @@ QuaternionQ QuaternionQ::fromEuler2Quat(Vec4 euler)
 //---------------------------------------------------------------------------
 //converte o quaternion em eixo e angulo (passados por referencia)
 //baseado no site http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm
-void QuaternionQ::toAxisAngle( Vec4* axis, dReal* angle ) {
-  //assume que o quaternion jah esta normalizado
-  *angle = 2*acos(this->w);
-  dReal s = 1 - this->w*this->w; //0<=s<=1
-  if (s > REAL(0.0)) { //evita divisao por zero
-    s = dRecipSqrt( s );
-    axis->x1 = this->x * s;
-    axis->x2 = this->y * s;
-    axis->x3 = this->z * s;
-  }
-  else { //s==0 => this->w==1 => angle==0 => nao importa o eixo (define eixo arbitrario)
-    *angle = 0;
-    axis->x1 = 1;
-    axis->x2 = 0;
-    axis->x3 = 0;
-  }
 
-  //radToGrau
-  *angle = (180.0/3.14159265359)*(*angle);
-
-  //truncando em 10 casas decimais
-  //*
-  *angle = trunc((*angle)*pow(10.0,10.0))/pow(10.0,10.0);
-  axis->x1 = trunc(axis->x()*pow(10.0,10.0))/pow(10.0,10.0);
-  axis->x2 = trunc(axis->y()*pow(10.0,10.0))/pow(10.0,10.0);
-  axis->x3 = trunc(axis->z()*pow(10.0,10.0))/pow(10.0,10.0);
-  //*/
-}
-
-
-//---------------------------------------------------------------------------
-//converte eixo e angulo em um quaternion e atribui a this
-void QuaternionQ::fromAxisAngle( Vec4 axis, dReal angle ) {
-  //grauToRad
-  angle = (3.14159265359/180.0)*(angle);
-
-  //se eixo nao estiver normalizado, esse metodo o normaliza
-  float l = axis.x()*axis.x() + axis.y()*axis.y() + axis.z()*axis.z();
-  if (l > REAL(0.0)) {
-    angle *= REAL(0.5);
-    this->setScalar(cos(angle));
-    l = dSin(angle) * dRecipSqrt(l);
-    this->setPosX(axis.x()*l);
-    this->setPosY(axis.y()*l);
-    this->setPosZ(axis.z()*l);
-  }
-  else {
-    this->w = 1;
-    this->x = 0;
-    this->y = 0;
-    this->z = 0;
-  }
-}
 
 void QuaternionQ::showQuaternion()
 {
@@ -652,6 +565,34 @@ QuaternionQ QuaternionQ::inverse()
     QuaternionQ q = (*this);
     q =  q.conjugate();
     return q / QuaternionQ::dot((*this), (*this));
+}
+
+void QuaternionQ::toAxisAngle(Vec4 *axis, float *angle)
+{
+    *angle = 2*acos(this->w);
+    float s = 1 - this->w*this->w; //0<=s<=1
+    if (s > 0.0) { //evita divisao por zero
+      s = dRecipSqrt( s );
+      axis->x1 = this->x * s;
+      axis->x2 = this->y * s;
+      axis->x3 = this->z * s;
+    }
+    else { //s==0 => this->w==1 => angle==0 => nao importa o eixo (define eixo arbitrario)
+      *angle = 0;
+      axis->x1 = 1;
+      axis->x2 = 0;
+      axis->x3 = 0;
+    }
+
+    //radToGrau
+    *angle = (180.0/3.14159265359)*(*angle);
+
+    //truncando em 10 casas decimais
+    //*
+    *angle = trunc((*angle)*pow(10.0,10.0))/pow(10.0,10.0);
+    axis->x1 = trunc(axis->x()*pow(10.0,10.0))/pow(10.0,10.0);
+    axis->x2 = trunc(axis->y()*pow(10.0,10.0))/pow(10.0,10.0);
+    axis->x3 = trunc(axis->z()*pow(10.0,10.0))/pow(10.0,10.0);
 }
 
 bool operator==(QuaternionQ p, QuaternionQ q)
