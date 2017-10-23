@@ -31,6 +31,8 @@ class Scene
 
     float          velocity_ball;
 
+    bool           show_second_viewport;
+
 
 public:
     Scene();
@@ -65,6 +67,9 @@ public:
 
     void           drawCannon();
     void           getTrajetory();
+
+    void           enableSecondViewport(bool b);
+    bool           isEnabledSecondViewport();
 
 
 

@@ -13,6 +13,7 @@ Scene::Scene()
     this->sim_status = true;
     all_objects.clear();
     velocity_ball = 60.;
+    show_second_viewport = true;
     getTrajetory();
 }
 
@@ -203,9 +204,8 @@ void Scene::draw(){
     glPopMatrix();
     Draw::Shadow(this);
 
-
-
-    secundaryView();
+    if(show_second_viewport)
+        secundaryView();
 }
 
 void Scene::drawShadow()
@@ -249,6 +249,16 @@ void Scene::getTrajetory()
     }
     Physics::closeObject(obj);
     delete obj;
+}
+
+void Scene::enableSecondViewport(bool b)
+{
+    show_second_viewport = b;
+}
+
+bool Scene::isEnabledSecondViewport()
+{
+    return show_second_viewport;
 }
 
 void Scene::addForce(Vec4 value, int id_object)

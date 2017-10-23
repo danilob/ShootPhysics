@@ -176,6 +176,10 @@ void GLWidget::keyPressEvent(QKeyEvent *event){
      if(event->key()==Qt::Key_P){
         singleShotCapture();
      }
+
+     if(event->key()==Qt::Key_V){
+        scene->enableSecondViewport(!scene->isEnabledSecondViewport());
+     }
 }
 
 void GLWidget::simStep(){
