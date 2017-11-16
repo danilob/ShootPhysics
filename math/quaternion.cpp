@@ -326,90 +326,7 @@ QuaternionQ operator+(QuaternionQ p, QuaternionQ q)
 //---------------------------------------------------------------------------
 //converte o quaternion em angulos de Euler (ordem XYZ)
 Vec4 QuaternionQ::toEuler() {
-//  //quaternion para matriz de rotacao
-////  dMatrix3 R;
-////  dQuaternion q;
-////    q[0] = this->w;
-////    q[1] = this->xyz.x1;
-////    q[2] = this->xyz.x2;
-////    q[3] = this->xyz.x3;
-//    Matrix4x4 R = this->getMatrix();
-//  //dQtoR( q, R );
 
-//  /*
-//  //matriz de rotacao para angulos de Euler (ordem XYZ)
-//  Vec4 eulerXYZ = Vec4();
-//    eulerXYZ.y = asin(-(R[2])); //this->mat[0][2]
-//    eulerXYZ.x = asin( (R[6])/cos(eulerXYZ.y) ); //this->mat[1][2]
-//    eulerXYZ.z = asin( (R[1])/cos(eulerXYZ.y) ); //this->mat[0][1]
-//  //*/
-//  /*
-//  //matriz de rotacao para angulos de Euler (ordem XYZ)
-//  Vec4 eulerXYZ = Vec4();
-//    eulerXYZ.x = atan2( R[6], R[10] ); //this->mat[1][2],this->mat[2][2]
-//    eulerXYZ.z = atan2( R[1], R[0] ); //this->mat[0][1],this->mat[0][0]
-//    eulerXYZ.y = asin(-(R[2])); //this->mat[0][2]
-//  //*/
-//  /*
-//  //matriz de rotacao para angulos de Euler (ordem XYZ)
-//  Vec4 eulerXYZ = Vec4();
-//  if ( -R[2] > 0.998 ) {
-//    eulerXYZ.x = atan2( R[4], R[8] ); //this->mat[1][0],this->mat[2][0]
-//    eulerXYZ.y = 3.14159265359/2.0;
-//    eulerXYZ.z = 0;
-//  }
-//  if ( -R[2] < -0.998 ) {
-//    eulerXYZ.x = atan2( R[4], R[8] ); //this->mat[1][0],this->mat[2][0]
-//    eulerXYZ.y = -3.14159265359/2.0;
-//    eulerXYZ.z = 0;
-//  }
-//  if ( ( -R[2] <= 0.998 ) && ( -R[2] >= -0.998 ) ) {
-//    eulerXYZ.x = atan2( R[6], R[10] ); //this->mat[1][2],this->mat[2][2]
-//    eulerXYZ.z = atan2( R[1], R[0] ); //this->mat[0][1],this->mat[0][0]
-//    eulerXYZ.y = asin(-(R[2])); //this->mat[0][2]
-//  }
-//  //*/
-//  //*
-//  //matriz de rotacao para angulos de Euler (ordem XYZ)
-////  Vec4 eulerXYZ = Vec4();
-////  if ( -R[2] > 0.998 ) {
-////      eulerXYZ.x1 = 0;
-////      eulerXYZ.x2 = 3.14159265359/2.0;
-////      eulerXYZ.x3 = atan2( R[9], R[8] ); //this->mat[2][1],this->mat[2][0]
-////  }
-////  if ( -R[2] < -0.998 ) {
-////    eulerXYZ.x1 = 0;
-////    eulerXYZ.x2 = -3.14159265359/2.0;
-////    eulerXYZ.x3 = atan2( R[9], R[8] ); //this->mat[2][1],this->mat[2][0]
-////  }
-////  if ( ( -R[2] <= 0.998 ) && ( -R[2] >= -0.998 ) ) {
-////    eulerXYZ.x1 = atan2( R[6], R[10] ); //this->mat[1][2],this->mat[2][2]
-////    eulerXYZ.x2 = atan2( R[1], R[0] ); //this->mat[0][1],this->mat[0][0]
-////    eulerXYZ.x3 = asin(-(R[2])); //this->mat[0][2]
-////  }
-//    Vec4 euler;
-//      if ( -R.matrix[2] > 0.998 ) {
-//          euler.x1 = 0;
-//          euler.x2 = 3.14159265359/2.0;
-//          euler.x3 = atan2( R.matrix[9], R.matrix[8] ); //this->mat[2][1],this->mat[2][0]
-//      }
-//      if ( -R.matrix[2] < -0.998 ) {
-//        euler.x1 = 0;
-//        euler.x2 = -3.14159265359/2.0;
-//        euler.x3 = atan2( R.matrix[9], R.matrix[8] ); //this->mat[2][1],this->mat[2][0]
-//      }
-//      if ( ( -R.matrix[2] <= 0.998 ) && ( -R.matrix[2] >= -0.998 ) ) {
-//        euler.x1 = atan2( R.matrix[6], R.matrix[10] ); //this->mat[1][2],this->mat[2][2]
-//        euler.x2 = atan2( R.matrix[1], R.matrix[0] ); //this->mat[0][1],this->mat[0][0]
-//        euler.x3 = asin(-(R.matrix[2])); //this->mat[0][2]
-//      }
-
-//  //*/
-
-//  //radToGrau
-//  euler.x1 = (180.0/3.14159265359)*euler.x();
-//  euler.x2 = (180.0/3.14159265359)*euler.y();
-//  euler.x3 = (180.0/3.14159265359)*euler.z();
     Vec4 euler;
     euler.x1 = atan2(2*(w*x+y*z),(1-2*(x*x+y*y)))*(180.0/M_PI);
     euler.x2 = asin(2*(w*y-z*x))*(180.0/M_PI);
@@ -421,13 +338,6 @@ Vec4 QuaternionQ::toEuler() {
 //---------------------------------------------------------------------------
 //converte os angulos de Euler em um quaternion e atribui a this
 void QuaternionQ::fromEuler( Vec4 euler) {
-//  dMatrix3 R;
-//  dQuaternion q;
-//  dRFromEulerAngles (R,(3.14159265359/180.0)*eulerXYZ.x(),(3.14159265359/180.0)*eulerXYZ.y(),(3.14159265359/180.0)*eulerXYZ.z());
-//    dRtoQ( R, q );
-//  //atribui quaternion calculado a this
-//  this->w = q[0];
-//  this->xyz = Vec4(q[1],q[2],q[3]);
     float thetaX,thetaY,thetaZ;
         thetaX = (euler.x() / 2.0) * (M_PI / 180.0);
         thetaY = (euler.y() / 2.0) * (M_PI / 180.0);
