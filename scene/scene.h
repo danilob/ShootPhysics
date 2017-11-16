@@ -1,5 +1,6 @@
 #ifndef SCENE_H
 #define SCENE_H
+
 #include "physics/physics.h"
 #include "math/vec4.h"
 
@@ -10,8 +11,10 @@ class Camera;
 
 using namespace std;
 
-class Scene
+class Scene: public QObject
 {
+    Q_OBJECT
+private:
     //physics
     WorldID        world;
     SpaceID        space;

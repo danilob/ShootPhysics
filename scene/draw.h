@@ -8,7 +8,7 @@ class Scene;
 namespace Draw{
 
 
-    void GroundInfinity();
+    void GroundInfinity(int size = 100, int steps = 5);
     void SphereColor(Vec4 position, QuaternionQ orientation, Vec4 color, float radius);
 
     void Sphere(Vec4 position, QuaternionQ orientation, Vec4 color, float radius);

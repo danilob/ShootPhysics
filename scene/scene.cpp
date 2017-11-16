@@ -17,6 +17,11 @@ Scene::Scene()
     getTrajetory();
 }
 
+Scene::~Scene()
+{
+    Physics::closeScene(this);
+}
+
 void Scene::setWindow(int width, int height)
 {
     this->width = width;
@@ -193,8 +198,8 @@ void Scene::draw(){
     lookAt();
     glPushMatrix();
 
-    Draw::SphereColor(Vec4(),QuaternionQ(),Vec4(0,0.5,0.5),0.2);
     Draw::GroundInfinity();
+    Draw::SphereColor(Vec4(),QuaternionQ(),Vec4(0,0.5,0.5),0.2);
     Draw::TrajetoryBall(trajetory,Vec4(0.4,0.1,0.5));
     drawCannon();
     for(int i=0;i<all_objects.size();i++){

@@ -12,8 +12,6 @@ TARGET = ShootPhysics
 TEMPLATE = app
 
 DEFINES += \
-           SHADERS_ENABLED \
-           GL_GLEXT_PROTOTYPES \
            dDOUBLE \
 
 
@@ -40,6 +38,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-LIBS += -lode -lGLU -lglut -lGL -lgsl -lgslcblas -fopenmp -lGLEW
+LIBS += -lode -lGLU -lglut
 
 

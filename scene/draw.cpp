@@ -4,29 +4,32 @@
 #include "scene.h"
 
 
-void Draw::GroundInfinity()
+void Draw::GroundInfinity(int size, int steps)
 {
-    int size = 100;
-    int steps = 5;
+    size = size/2;
     glDisable(GL_LIGHTING);
     glColor3f(0.9,0.9,0.9);
     glBegin(GL_QUADS);
-    for(int i=-size;i<=size+steps;i+=steps){
-        for(int j=-size;j<=size+steps;j+=steps){
+    for(int i=-size;i<size;i+=steps){
+        for(int j=-size;j<size;j+=steps){
             glVertex3f(i,0,j);
             glVertex3f(i,0,j+steps);
             glVertex3f(i+steps,0,j+steps);
             glVertex3f(i+steps,0,j);
         }
     }
+//    glVertex3f(-size,0,-size);
+//    glVertex3f(size,0,-size);
+//    glVertex3f(size,0,size);
+//    glVertex3f(-size,0,size);
     glEnd();
 
     glLineWidth(0.8);
 
     glColor3f(0.4,0.4,0.4);
     glBegin(GL_LINES);
-    for(int i=-size;i<=size;i+=steps){
-        for(int j=-size;j<=size;j+=steps){
+    for(int i=-size;i<size;i+=steps){
+        for(int j=-size;j<size;j+=steps){
             glVertex3f(i,0.000,j);
             glVertex3f(i,0.000,j+steps);
 
@@ -38,8 +41,6 @@ void Draw::GroundInfinity()
 
             glVertex3f(i+steps,0.000,j);
             glVertex3f(i,0.000,j);
-
-
         }
     }
     glEnd();
@@ -83,8 +84,8 @@ void Draw::Sphere(Vec4 position, QuaternionQ orientation, Vec4 color, float radi
 
     glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     glColor3f(0,0,0);
-    glLineWidth(radius*1.0);
-    for (alpha = 0.0; alpha < PI; alpha += PI/gradation)
+    glLineWidth(radius*0.7);
+    for (alpha = 0; alpha <= PI; alpha += PI/gradation)
     {
         glBegin(GL_TRIANGLE_STRIP);
         for (beta = 0.0; beta < 2.01*PI; beta += PI/gradation)
@@ -427,6 +428,7 @@ void Draw::Cylinder(Vec4 position, QuaternionQ orientation, Vec4 scale, Vec4 col
         glVertex3f(x, y , height/2.);
         glVertex3f(x, y , -height/2.);
         angle = angle + angle_stepsize;
+
     }
     glVertex3f(radius, 0.0, height/2);
     glVertex3f(radius, 0.0, -height/2);

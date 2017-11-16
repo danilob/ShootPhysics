@@ -31,22 +31,13 @@ GLWidget::GLWidget(QWidget *parent) :
 void GLWidget::initializeGL()
 {
     glClearColor(1,1,1,1);
-    glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE);
-
-    glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 
     glClearDepth(1.0f);									// Depth Buffer Setup
     glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
     glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
-    glShadeModel(GL_SMOOTH);
 
-    glEnable (GL_LINE_SMOOTH);
-    glEnable (GL_POINT_SMOOTH);
 
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_MULTISAMPLE);
 
 }
 
@@ -69,7 +60,6 @@ void GLWidget::resizeGL(int w, int h)
 void GLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glLoadIdentity();
 
     scene->draw();
 }

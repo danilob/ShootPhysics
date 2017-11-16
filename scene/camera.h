@@ -5,6 +5,7 @@
 #define CAMERA_FAR 0
 #define CAMERA_GAME 1
 
+//em construção
 class Camera
 {
 public:
